@@ -1061,7 +1061,8 @@ public class ActivityStack {
             // There are no more activities!  Let's just start up the
             // Launcher...
             if (mMainStack) {
-                return mService.startHomeActivityLocked();
+		//                return mService.startHomeActivityLocked();
+		return false;
             }
         }
 
@@ -1333,10 +1334,12 @@ public class ActivityStack {
                 next.hasBeenLaunched = true;
             } else {
                 if (SHOW_APP_STARTING_PREVIEW) {
+		    /*
                     mService.mWindowManager.setAppStartingWindow(
                             next, next.packageName, next.theme,
                             next.nonLocalizedLabel,
                             next.labelRes, next.icon, null, true);
+		    */
                 }
                 if (DEBUG_SWITCH) Slog.v(TAG, "Restarting: " + next);
             }

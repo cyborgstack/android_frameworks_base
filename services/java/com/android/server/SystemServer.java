@@ -191,6 +191,7 @@ class ServerThread extends Thread {
             Watchdog.getInstance().init(context, battery, power, alarm,
                     ActivityManagerService.self());
 
+	    /*
             Slog.i(TAG, "Window Manager");
             wm = WindowManagerService.main(context, power,
                     factoryTest != SystemServer.FACTORY_TEST_LOW_LEVEL);
@@ -198,6 +199,7 @@ class ServerThread extends Thread {
 
             ((ActivityManagerService)ServiceManager.getService("activity"))
                     .setWindowManager(wm);
+	    */
 
             // Skip Bluetooth if we have an emulator kernel
             // TODO: Use a more reliable check to see if this product should
@@ -261,6 +263,7 @@ class ServerThread extends Thread {
                 Slog.e(TAG, "Failure starting Clipboard Service", e);
             }
 
+	    /*
             try {
                 Slog.i(TAG, "Input Method Service");
                 imm = new InputMethodManagerService(context, statusBar);
@@ -268,6 +271,7 @@ class ServerThread extends Thread {
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting Input Manager Service", e);
             }
+	    */
 
             try {
                 Slog.i(TAG, "NetStat Service");
@@ -366,6 +370,7 @@ class ServerThread extends Thread {
                 Slog.e(TAG, "Failure starting DropBoxManagerService", e);
             }
 
+	    /*
             try {
                 Slog.i(TAG, "Wallpaper Service");
                 wallpaper = new WallpaperManagerService(context);
@@ -373,6 +378,7 @@ class ServerThread extends Thread {
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting Wallpaper Service", e);
             }
+	    */
 
             try {
                 Slog.i(TAG, "Audio Service");
@@ -455,7 +461,8 @@ class ServerThread extends Thread {
 
         // Before things start rolling, be sure we have decided whether
         // we are in safe mode.
-        final boolean safeMode = wm.detectSafeMode();
+	//        final boolean safeMode = wm.detectSafeMode();
+	final boolean safeMode = false;
         if (safeMode) {
             try {
                 ActivityManagerNative.getDefault().enterSafeMode();
@@ -483,7 +490,7 @@ class ServerThread extends Thread {
         if (statusBar != null) {
             statusBar.systemReady();
         }
-        wm.systemReady();
+        //wm.systemReady();
         power.systemReady();
         try {
             pm.systemReady();

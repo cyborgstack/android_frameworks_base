@@ -46,6 +46,7 @@ ANDROID_SINGLETON_STATIC_INSTANCE(ComposerService);
 
 ComposerService::ComposerService()
 : Singleton<ComposerService>() {
+  if (0) {
     const String16 name("SurfaceFlinger");
     while (getService(name, &mComposerService) != NO_ERROR) {
         usleep(250000);
@@ -53,6 +54,12 @@ ComposerService::ComposerService()
     mServerCblkMemory = mComposerService->getCblk();
     mServerCblk = static_cast<surface_flinger_cblk_t volatile *>(
             mServerCblkMemory->getBase());
+  }
+  else {
+    mComposerService = NULL;
+    mServerCblkMemory = NULL;
+    mServerCblk = NULL;
+  }
 }
 
 sp<ISurfaceComposer> ComposerService::getComposerService() {
@@ -121,6 +128,8 @@ class Composer : public Singleton<Composer>
             mOpenTransactions.clear();
         mLock.unlock();
 
+	return;
+
         sp<ISurfaceComposer> sm(getComposerService());
         sm->openGlobalTransaction();
             const size_t N = clients.size();
@@ -165,6 +174,8 @@ SurfaceComposerClient::SurfaceComposerClient()
 
 void SurfaceComposerClient::onFirstRef()
 {
+    return;
+
     sp<ISurfaceComposer> sm(getComposerService());
     if (sm != 0) {
         sp<ISurfaceComposerClient> conn = sm->createConnection();
@@ -197,6 +208,8 @@ status_t SurfaceComposerClient::linkToComposerDeath(
         const sp<IBinder::DeathRecipient>& recipient,
         void* cookie, uint32_t flags)
 {
+    return NO_ERROR;
+
     sp<ISurfaceComposer> sm(getComposerService());
     return sm->asBinder()->linkToDeath(recipient, cookie, flags);
 }
@@ -217,6 +230,27 @@ void SurfaceComposerClient::dispose()
 status_t SurfaceComposerClient::getDisplayInfo(
         DisplayID dpy, DisplayInfo* info)
 {
+    info->w              = 49;
+    info->h              = 75;
+    info->orientation    = 0;
+    info->xdpi           = 165;
+    info->ydpi           = 165;
+    info->fps            = 30;
+    info->density        = 16;
+
+    info->pixelFormatInfo.format = HAL_PIXEL_FORMAT_YCbCr_422_SP;
+    info->pixelFormatInfo.bytesPerPixel = 1;
+    info->pixelFormatInfo.bitsPerPixel  = 16;
+    info->pixelFormatInfo.h_alpha       = 0;
+    info->pixelFormatInfo.l_alpha       = 0;
+    info->pixelFormatInfo.h_red         = 8;
+    info->pixelFormatInfo.l_red         = 0;
+    info->pixelFormatInfo.h_green       = 8;
+    info->pixelFormatInfo.l_green       = 0;
+    info->pixelFormatInfo.h_blue        = 8;
+    info->pixelFormatInfo.l_blue        = 0;
+    return NO_ERROR;
+
     if (uint32_t(dpy)>=SharedBufferStack::NUM_DISPLAY_MAX)
         return BAD_VALUE;
 
@@ -235,6 +269,8 @@ status_t SurfaceComposerClient::getDisplayInfo(
 
 ssize_t SurfaceComposerClient::getDisplayWidth(DisplayID dpy)
 {
+    return 49;
+
     if (uint32_t(dpy)>=SharedBufferStack::NUM_DISPLAY_MAX)
         return BAD_VALUE;
     volatile surface_flinger_cblk_t const * cblk = get_cblk();
@@ -244,6 +280,8 @@ ssize_t SurfaceComposerClient::getDisplayWidth(DisplayID dpy)
 
 ssize_t SurfaceComposerClient::getDisplayHeight(DisplayID dpy)
 {
+    return 74;
+
     if (uint32_t(dpy)>=SharedBufferStack::NUM_DISPLAY_MAX)
         return BAD_VALUE;
     volatile surface_flinger_cblk_t const * cblk = get_cblk();
@@ -253,6 +291,8 @@ ssize_t SurfaceComposerClient::getDisplayHeight(DisplayID dpy)
 
 ssize_t SurfaceComposerClient::getDisplayOrientation(DisplayID dpy)
 {
+    return 0;
+
     if (uint32_t(dpy)>=SharedBufferStack::NUM_DISPLAY_MAX)
         return BAD_VALUE;
     volatile surface_flinger_cblk_t const * cblk = get_cblk();
@@ -262,6 +302,8 @@ ssize_t SurfaceComposerClient::getDisplayOrientation(DisplayID dpy)
 
 ssize_t SurfaceComposerClient::getNumberOfDisplays()
 {
+    return 1;
+
     volatile surface_flinger_cblk_t const * cblk = get_cblk();
     uint32_t connected = cblk->connected;
     int n = 0;
@@ -341,12 +383,16 @@ void SurfaceComposerClient::closeGlobalTransaction()
 
 status_t SurfaceComposerClient::freezeDisplay(DisplayID dpy, uint32_t flags)
 {
+    return NO_ERROR;
+
     sp<ISurfaceComposer> sm(getComposerService());
     return sm->freezeDisplay(dpy, flags);
 }
 
 status_t SurfaceComposerClient::unfreezeDisplay(DisplayID dpy, uint32_t flags)
 {
+    return NO_ERROR;
+
     sp<ISurfaceComposer> sm(getComposerService());
     return sm->unfreezeDisplay(dpy, flags);
 }
@@ -354,6 +400,8 @@ status_t SurfaceComposerClient::unfreezeDisplay(DisplayID dpy, uint32_t flags)
 int SurfaceComposerClient::setOrientation(DisplayID dpy, 
         int orientation, uint32_t flags)
 {
+    return 0;
+
     sp<ISurfaceComposer> sm(getComposerService());
     return sm->setOrientation(dpy, orientation, flags);
 }
@@ -551,6 +599,8 @@ ScreenshotClient::ScreenshotClient()
 }
 
 status_t ScreenshotClient::update() {
+    return NO_ERROR;
+
     sp<ISurfaceComposer> s(ComposerService::getComposerService());
     if (s == NULL) return NO_INIT;
     mHeap = 0;
@@ -559,6 +609,8 @@ status_t ScreenshotClient::update() {
 }
 
 status_t ScreenshotClient::update(uint32_t reqWidth, uint32_t reqHeight) {
+    return NO_ERROR;
+
     sp<ISurfaceComposer> s(ComposerService::getComposerService());
     if (s == NULL) return NO_INIT;
     mHeap = 0;

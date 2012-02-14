@@ -67,7 +67,7 @@ extern "C" status_t system_init()
     property_get("system_init.startsurfaceflinger", propBuf, "1");
     if (strcmp(propBuf, "1") == 0) {
         // Start the SurfaceFlinger
-        SurfaceFlinger::instantiate();
+      //     SurfaceFlinger::instantiate();
     }
 
     // Start the sensor service

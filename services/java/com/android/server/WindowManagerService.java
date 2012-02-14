@@ -9748,6 +9748,7 @@ public class WindowManagerService extends IWindowManager.Stub
     }
 
     void reclaimSomeSurfaceMemoryLocked(WindowState win, String operation) {
+	if (false){
         final Surface surface = win.mSurface;
 
         EventLog.writeEvent(EventLogTags.WM_NO_SURFACE_MEMORY, win.toString(),
@@ -9835,6 +9836,7 @@ public class WindowManagerService extends IWindowManager.Stub
         } finally {
             Binder.restoreCallingIdentity(callingIdentity);
         }
+	}
     }
 
     private boolean updateFocusedWindowLocked(int mode) {

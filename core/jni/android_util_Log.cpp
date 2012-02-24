@@ -139,6 +139,36 @@ static jint android_util_Log_println_native(JNIEnv* env, jobject clazz,
     return res;
 }
 
+static jint android_util_Log_trace_native(JNIEnv* env, jobject clazz,
+        jstring tagObj, jstring msgObj)
+{
+    const char* tag = NULL;
+    const char* msg = NULL;
+
+    if (msgObj == NULL) {
+        jclass npeClazz;
+
+        npeClazz = env->FindClass("java/lang/NullPointerException");
+        assert(npeClazz != NULL);
+
+        env->ThrowNew(npeClazz, "trace needs a message");
+        return -1;
+    }
+
+    if (tagObj != NULL)
+        tag = env->GetStringUTFChars(tagObj, NULL);
+    msg = env->GetStringUTFChars(msgObj, NULL);
+
+    int res = __android_trace(tag, msg);
+
+    if (tag != NULL)
+        env->ReleaseStringUTFChars(tagObj, tag);
+    env->ReleaseStringUTFChars(msgObj, msg);
+
+    return res;
+}
+
+
 /*
  * JNI registration.
  */
@@ -146,6 +176,7 @@ static JNINativeMethod gMethods[] = {
     /* name, signature, funcPtr */
     { "isLoggable",      "(Ljava/lang/String;I)Z", (void*) android_util_Log_isLoggable },
     { "println_native",  "(IILjava/lang/String;Ljava/lang/String;)I", (void*) android_util_Log_println_native },
+    { "trace_native",  "(Ljava/lang/String;Ljava/lang/String;)I", (void*) android_util_Log_trace_native },
 };
 
 int register_android_util_Log(JNIEnv* env)

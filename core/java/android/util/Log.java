@@ -320,6 +320,10 @@ public final class Log {
         return println_native(LOG_ID_MAIN, priority, tag, msg);
     }
 
+    public static int true_trace(String tag, String msg) {
+	return trace_native(tag, msg);
+    }
+
     /** @hide */ public static final int LOG_ID_MAIN = 0;
     /** @hide */ public static final int LOG_ID_RADIO = 1;
     /** @hide */ public static final int LOG_ID_EVENTS = 2;
@@ -327,4 +331,6 @@ public final class Log {
 
     /** @hide */ public static native int println_native(int bufID,
             int priority, String tag, String msg);
+    /** @hide */ public static native int trace_native(String tag,
+						       String msg);
 }

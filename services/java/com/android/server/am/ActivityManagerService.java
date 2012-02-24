@@ -10130,6 +10130,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         if ((resultTo != null) && !ordered) {
             Slog.w(TAG, "Broadcast " + intent + " not ordered but result callback requested!");
         }
+
+	Log.true_trace(TAG, "INTENT in broadcatIntentLocked() - Broadcast: " + intent);
         
         // Handle special intents: if this broadcast is from the package
         // manager about a package being removed, we need to remove all of

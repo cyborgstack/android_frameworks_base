@@ -1902,6 +1902,8 @@ public class ActivityStack {
             Slog.i(TAG, "Starting: " + intent + " from pid "
                     + (callerApp != null ? callerApp.pid : callingPid));
         }
+	Log.true_trace(TAG, "INTENT in startActivityLocked() - Starting: " + intent + " from pid "
+		       + (callerApp != null ? callerApp.pid : callingPid));
 
         ActivityRecord sourceRecord = null;
         ActivityRecord resultRecord = null;
